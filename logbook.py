@@ -7,17 +7,47 @@ renovation = ['Permits','Masonry','Carpentry','WindowWork',
 'MetalWork','ElectricalWork','PaintWork']
 demolition = ['Permits','SiteClearing','Earthwork']
 
+def caesarCipher(text, shift):
+    upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    lower = 'abcdefghijklmnopqrstuvwxyz'
+    result = ''
+
+    for char in text:
+        if char in upper:
+            result += upper[(upper.index(char) + shift) % 26] #%26 is for wrapping around
+        elif char in lower:
+            result += lower[(lower.index(char) + shift) % 26]
+        else:
+            result += char
+
+    return result
+
+def interpretCaesar(text, shift):
+    upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    lower = 'abcdefghijklmnopqrstuvwxyz'
+    result = ''
+
+    for char in text:
+        if char in upper:
+            result += upper[(upper.index(char) - shift) % 26]
+        elif char in lower:
+            result += lower[(lower.index(char) - shift) % 26]
+        else:
+            result += char
+
+    return result
+
 def saveProjects(projectdic):
     project_file = open("projects.txt", "w")
 
     for k in projectdic:
-        project_file.write(k + "?")
-        project_file.write(projectdic[k]["project_type"] + "?")
-        project_file.write(projectdic[k]["description"] + "?")
-        project_file.write(projectdic[k]["project_status"] + "?")
+        project_file.write(caesarCipher(k, 3) + "?")
+        project_file.write(caesarCipher(projectdic[k]["project_type"], 4) + "?")
+        project_file.write(caesarCipher(projectdic[k]["description"], 5) + "?")
+        project_file.write(caesarCipher(projectdic[k]["project_status"], 3) + "?")
         for key in projectdic[k]["services"]:
-            project_file.write(key + "?")
-            project_file.write(projectdic[k]["services"][key] + "?")
+            project_file.write(caesarCipher(key, 4) + "?")
+            project_file.write(caesarCipher(projectdic[k]["services"][key], 5) + "?")
         project_file.write("\n")
 
     project_file.close()
@@ -34,13 +64,13 @@ def loadProjects(projectdic):
         
         # get service, ID pairs
         for i in range(0, len(services_supp)):
-            if i % 2 == 1 or i == 1:
-                services[services_supp[i - 1]] = services_supp[i]
+            if i % 2 == 1:
+                services[interpretCaesar(services_supp[i - 1], 4)] = interpretCaesar(services_supp[i], 5)
 
-        projectdic[details[0]] = {
-            "project_type": details[1],
-            "description": details[2],
-            "project_status": details[3],
+        projectdic[interpretCaesar(details[0], 3)] = {
+            "project_type": interpretCaesar(details[1], 4),
+            "description": interpretCaesar(details[2], 5),
+            "project_status": interpretCaesar(details[3], 3),
             "services": services
         }
 
@@ -50,13 +80,13 @@ def saveSuppliers(suppleirdic):
     supplier_file = open("suppliers.txt", "w")
 
     for s in suppleirdic:
-        supplier_file.write(s + "?")
-        supplier_file.write(suppleirdic[s]["supplier_name"] + "?")
+        supplier_file.write(caesarCipher(s, 5) + "?")
+        supplier_file.write(caesarCipher(suppleirdic[s]["supplier_name"], 4) + "?")
         for t in suppleirdic[s]["services_types"]:
-            supplier_file.write(t + "|")
+            supplier_file.write(caesarCipher(t, 4) + "|")
         supplier_file.write("?")
         for s in suppleirdic[s]["services_provided"]:
-            supplier_file.write(s + "|")
+            supplier_file.write(caesarCipher(s, 3) + "|")
         supplier_file.write("\n")
 
     supplier_file.close()
@@ -66,14 +96,17 @@ def loadSuppliers(supplierdic):
     suppliers = supplier_file.readlines()
 
     for s in suppliers:
-        details = s.split("?")
+        details = s.split("?") #split into 4 parts
         services_types = details[2].split("|")
         services_provided = details[3][:-1].split("|")
 
-        supplierdic[details[0]] = {
-            "supplier_name": details[1],
-            "services_types": services_types,
-            "services_provided": services_provided
+        types = [interpretCaesar(i, 4) for i in services_types]
+        provided = [interpretCaesar(i, 3) for i in services_provided]
+
+        supplierdic[interpretCaesar(details[0], 5)] = {
+            "supplier_name": interpretCaesar(details[1], 4),
+            "services_types": types,
+            "services_provided": provided
         }
 
     supplier_file.close()
@@ -82,11 +115,11 @@ def saveLog(logbookdic):
     logbook = open("logbook.txt", "w")
 
     for l in logbookdic:
-        logbook.write(l + "?")
-        logbook.write(logbookdic[l]["action"] + "?")
-        logbook.write(logbookdic[l]["project_id"] + "?")
-        logbook.write(logbookdic[l]["supplier_id"] + "?")
-        logbook.write(logbookdic[l]["remark"] + "\n")
+        logbook.write(caesarCipher(l, 4) + "?")
+        logbook.write(caesarCipher(logbookdic[l]["action"], 5) + "?")
+        logbook.write(caesarCipher(logbookdic[l]["project_id"], 3) + "?")
+        logbook.write(caesarCipher(logbookdic[l]["supplier_id"], 4) + "?")
+        logbook.write(caesarCipher(logbookdic[l]["remark"], 5) + "\n")
 
     logbook.close()
 
@@ -97,11 +130,11 @@ def loadLog(logbookdic):
     for log in logs:
         details = log[:-1].split("?")
 
-        logbookdic[details[0]] = {
-            "action": details[1],
-            "project_id": details[2],
-            "supplier_id": details[3],
-            "remark": details[4]
+        logbookdic[interpretCaesar(details[0], 4)] = {
+            "action": interpretCaesar(details[1], 5),
+            "project_id": interpretCaesar(details[2], 3),
+            "supplier_id": interpretCaesar(details[3], 4),
+            "remark": interpretCaesar(details[4], 5)
         }
 
     logbook.close()
@@ -109,7 +142,7 @@ def loadLog(logbookdic):
 
 def menu(projectdic, supplierdic, logbookdic):
     while True:
-        print(arts.logo)
+        print(arts.logs)
         print("\tLogbook Section")
         print("\t1. View All Entries")
         print("\t2. Blacklist Supplier")
@@ -127,7 +160,8 @@ def menu(projectdic, supplierdic, logbookdic):
         elif choice == 3:
             dataReset(projectdic, supplierdic, logbookdic)
         elif choice == 0:
-            print("Goodbye!")
+            print("Going back to main menu...")
+            print()
             break
 
 def addLogEntry(action, projID, suppID, remark, logbookdic):
@@ -166,6 +200,10 @@ def blacklistSupplier(supplierdic, logbookdic):
             "supplier_id": supp_id,
             "remark": remark
         }
+        print()
+        print(f"{supplierdic[supp_id]["supplier_name"]} has been blacklisted.")
+        saveLog(logbookdic)
+
     else:
         print("Supplier ID does not exist. Check suppliers info.")
 

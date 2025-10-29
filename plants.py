@@ -1,18 +1,19 @@
 import arts, logbook
 
+
 def menu(projectdic,supplierdic, logbookdic, blacklisted):
     while True:
-        print(arts.logo)
-        print("\tProject Section")
-        print("\t1. Add Project")
-        print("\t2. Delete All Projects")
-        print("\t3. Delete Project")
-        print("\t4. View Project")
-        print("\t5. View All Projects")
-        print("\t6. Update Project Status")
-        print("\t7. Change Supplier")
-        print("\t8. Change Type")
-        print("\t0. Exit")
+        print(arts.projects)
+        print()
+        print("\t[1] Add Project")
+        print("\t[2] Delete All Projects")
+        print("\t[3] Delete Project")
+        print("\t[4] View Project")
+        print("\t[5] View All Projects")
+        print("\t[6] Update Project Status")
+        print("\t[7] Change Supplier")
+        print("\t[8] Change Type")
+        print("\t[0] Exit")
         print()
 
         choice = int(input("Choice: "))
@@ -33,7 +34,8 @@ def menu(projectdic,supplierdic, logbookdic, blacklisted):
         elif choice == 8:
             changeType(projectdic,supplierdic, logbookdic, blacklisted)
         elif choice == 0:
-            print("Goodbye!")
+            print("Going back to main menu...")
+            print()
             break
 def addProject(projectdic, logbookdic, supplierdic, blacklisted):
     print(arts.logo)
@@ -88,6 +90,7 @@ def addProject(projectdic, logbookdic, supplierdic, blacklisted):
         "services" : services
     }
 
+    print()
     print("Project has been added.")
 
     logbook.addLogEntry("add_project", proj_id, "NA", "NA", logbookdic)
@@ -105,6 +108,7 @@ def deleteProject(projectdic, logbookdic):
                 project_delete.append(key)
         for i in project_delete: #loop throught the list and delete the log entries of the project in logbook
             del logbookdic[i]  
+            print()
         print("Project has been deleted.")
         logbook.saveProjects(projectdic)
         logbook.saveLog(logbookdic)
@@ -122,6 +126,7 @@ def deleteAllProject(projectdic, logbookdic):
         del logbookdic[i]
 
     projectdic.clear()    
+    print()
     print("All projects have been deleted.")
     logbook.saveProjects(projectdic)
     logbook.saveLog(logbookdic)
@@ -169,6 +174,7 @@ def updateStatus(projectdic, logbookdic):
                 print("Project status is the same. Please choose another status.")
             elif proj_status in logbook.statuses:
                 projectdic[proj_id]["project_status"] = proj_status
+                print()
                 print("Project status has been updated.")
                 break
             else:
@@ -199,6 +205,7 @@ def changeSupplier(projectdic, supplierdic,logbookdic, blacklisted):
                         print("Supplier is blacklisted. Please choose another supplier.")
                     else:
                         projectdic[proj_id]["services"][service] = change_supplier
+                        print()
                         print("Supplier has been changed.")
                         break
                 logbook.addLogEntry("change_supplier", proj_id, change_supplier, service, logbookdic)
@@ -256,6 +263,8 @@ def changeType(projectdic,supplierdic,logbookdic, blacklisted):
                             print(f"{supplierdic[supplier]["supplier_name"]} cannot provide {key} service. Please choose another supplier.")
                     else:
                         print("Supplier ID does not exist. Please choose another supplier.")
+            print()
+            print("Project type has been changed.")
             logbook.addLogEntry("change_type", proj_id, "NA", "NA", logbookdic)
             logbook.saveProjects(projectdic)    
         else:

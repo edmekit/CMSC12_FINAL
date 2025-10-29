@@ -4,16 +4,16 @@ import arts, logbook
 
 def menu(supplierdic, logbookdic):
     while True:
-        print(arts.logo)
-        print("\tSupplier Section")
-        print("\t1. Add Supplier")
-        print("\t2. Add Project Type")
-        print("\t3. Remove Project Type")
-        print("\t4. Add Service Provided")
-        print("\t5. Remove Service Provided")
-        print("\t6. View Supplier")
-        print("\t7. View All Suppliers")
-        print("\t0. Exit")
+        print(arts.suppliers)
+        print()
+        print("\t[1] Add Supplier")
+        print("\t[2] Add Project Type")
+        print("\t[3] Remove Project Type")
+        print("\t[4] Add Service Provided")
+        print("\t[5] Remove Service Provided")
+        print("\t[6] View Supplier")
+        print("\t[7] View All Suppliers")
+        print("\t[0] Exit")
         print()
 
         choice = int(input("Choice: "))
@@ -32,7 +32,8 @@ def menu(supplierdic, logbookdic):
         elif choice == 7:
             viewAllSuppliers(supplierdic)
         elif choice == 0:
-            print("Goodbye!")
+            print("Going back to main menu...")
+            print()
             break
 
 def addSupplier(supplierdic, logbookdic):
@@ -84,10 +85,10 @@ def addSupplier(supplierdic, logbookdic):
         "services_provided": services_provided
     }
 
+    print()
     print("Supplier added successfully.")
 
     logbook.addLogEntry("add_supplier", "NA", supp_id, "NA", logbookdic)
-
     logbook.saveSuppliers(supplierdic)
 
 def addProjectTypes(supplierdic, logbookdic):
@@ -100,6 +101,7 @@ def addProjectTypes(supplierdic, logbookdic):
                 print(f"{new_type} services is already provided by this supplier.")
             elif new_type in logbook.types:
                 supplierdic[supp_id]["services_types"].append(new_type)
+                print()
                 print("Project type added successfully.")
                 break
             else:
@@ -119,6 +121,7 @@ def removeProjectTypes(supplierdic, logbookdic):
             remove_type = input("Enter which project type you want to remove: ")
             if remove_type in supplierdic[supp_id]["services_types"]:
                 supplierdic[supp_id]["services_types"].remove(remove_type)
+                print()
                 print("Project type removed successfully.")
                 break
             elif remove_type in logbook.types:
@@ -140,7 +143,8 @@ def addServiceProvided(supplierdic, logbookdic):
                 print(f"{new_service} is already provided by this supplier.")
             elif new_service in logbook.construction:
                 supplierdic[supp_id]["services_provided"].append(new_service)
-                print("Service added successfully.")
+                print()
+                print(f"Added {new_service} service successfully.")
                 break
             else:
                 print("Service provided can only be  Permits, Design, Masonry, Carpentry, WindowWork, MetalWork, Furniture, ElectricalWork, Plumbing, PaintWork, SiteClearing, Earthwork.")
@@ -158,6 +162,7 @@ def removeServiceProvided(supplierdic, logbookdic):
 
             if service_type in supplierdic[supp_id]["services_provided"]: # avoid duplicates
                 supplierdic[supp_id]["services_provided"].remove(service_type)
+                print()
                 print(f"Removed {service_type} service from supplier.")
                 break
             elif service_type in logbook.types:
