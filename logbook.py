@@ -143,6 +143,8 @@ def addLogEntry(action, projID, suppID, remark, logbookdic):
     saveLog(logbookdic)
 
 def viewAllEntries(logbookdic):
+    if len(logbookdic) == 0:
+        print("No log entries.")
     for key in logbookdic:
         print(f"\tLog ID: {key}")
         print(f"\tAction: {logbookdic[key]["action"]}")

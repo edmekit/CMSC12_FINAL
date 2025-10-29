@@ -46,7 +46,7 @@ def addSupplier(supplierdic, logbookdic):
     
     service_types = []
     while True:
-        service_type = input(f"Enter project type provided by {supp_name}: ").capitalize()
+        service_type = input(f"Enter project type provided by {supp_name}: ")
         if service_type in service_types: # avoid duplicates
             print("Supplier already provides this service.")
         elif service_type in logbook.types:
@@ -64,11 +64,11 @@ def addSupplier(supplierdic, logbookdic):
 
     while True:
         print()
-        service_provided = input(f"Enter service provided by {supp_name} (type 'ALL' to add all services): ").capitalize()
+        service_provided = input(f"Enter service provided by {supp_name} (type 'ALL' to add all services): ")
         if service_provided == "ALL":
             services_provided = logbook.construction
             break
-        if service_provided in service_types: # avoid duplicates
+        elif service_provided in service_types: # avoid duplicates
             print("Supplier already provides this service.")
         elif service_provided in logbook.construction:
             services_provided.append(service_provided)
@@ -95,7 +95,7 @@ def addProjectTypes(supplierdic, logbookdic):
 
     if supp_id in supplierdic:
         while True:
-            new_type = input("Enter new project type: ").capitalize()
+            new_type = input("Enter new project type: ")
             if new_type in supplierdic[supp_id]["services_types"]:
                 print(f"{new_type} services is already provided by this supplier.")
             elif new_type in logbook.types:
@@ -116,7 +116,7 @@ def removeProjectTypes(supplierdic, logbookdic):
 
     if supp_id in supplierdic:
         while True:
-            remove_type = input("Enter which project type you want to remove: ").capitalize()
+            remove_type = input("Enter which project type you want to remove: ")
             if remove_type in supplierdic[supp_id]["services_types"]:
                 supplierdic[supp_id]["services_types"].remove(remove_type)
                 print("Project type removed successfully.")
@@ -135,7 +135,7 @@ def addServiceProvided(supplierdic, logbookdic):
 
     if supp_id in supplierdic:
         while True:
-            new_service = input(f"Enter new service provided by {supplierdic[supp_id]["supplier_name"]}: ").capitalize()
+            new_service = input(f"Enter new service provided by {supplierdic[supp_id]["supplier_name"]}: ")
             if new_service in supplierdic[supp_id]["services_provided"]:
                 print(f"{new_service} is already provided by this supplier.")
             elif new_service in logbook.construction:
@@ -154,7 +154,8 @@ def removeServiceProvided(supplierdic, logbookdic):
 
     if supp_id in supplierdic:
         while True:
-            service_type = input(f"Enter service provided by {supplierdic[supp_id]["supplier_name"]} you want to remove: ").capitalize()
+            service_type = input(f"Enter service provided by {supplierdic[supp_id]["supplier_name"]} you want to remove: ")
+
             if service_type in supplierdic[supp_id]["services_provided"]: # avoid duplicates
                 supplierdic[supp_id]["services_provided"].remove(service_type)
                 print(f"Removed {service_type} service from supplier.")
@@ -184,6 +185,8 @@ def viewSupplier(supplierdic):
         print("Project ID does not exist. Check projects info.")
 
 def viewAllSuppliers(supplierdic):
+    if len(supplierdic) == 0:
+        print("No suppliers yet. Add one first.")
     for key in supplierdic:
         print("\t Supplier ID:", key)
         print("\t Supplier Name:", supplierdic[key]["supplier_name"]),

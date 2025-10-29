@@ -17,7 +17,7 @@ def menu(projectdic,supplierdic, logbookdic, blacklisted):
 
         choice = int(input("Choice: "))
         if choice == 1:
-            addProject(projectdic, logbookdic)
+            addProject(projectdic, logbookdic, supplierdic, blacklisted)
         elif choice == 2:
             deleteAllProject(projectdic, logbookdic)
         elif choice == 3:
@@ -35,7 +35,7 @@ def menu(projectdic,supplierdic, logbookdic, blacklisted):
         elif choice == 0:
             print("Goodbye!")
             break
-def addProject(projectdic, logbookdic):
+def addProject(projectdic, logbookdic, supplierdic, blacklisted):
     print(arts.logo)
     proj_id = "P" + str(len(projectdic) + 1)
     while True:
@@ -63,6 +63,22 @@ def addProject(projectdic, logbookdic):
     elif proj_type == "Demolition":
         for i in range(0, len(logbook.demolition)):
             services[logbook.demolition[i]] = ""
+
+    for key in services: #fill services with suppliers
+        while True:
+            supplier = input(f"Enter supplier ID for {key} service: ")
+            if supplier in supplierdic: #check if supplier exists
+                if supplier in blacklisted:
+                    print("Supplier is blacklisted. Please choose another supplier.")
+                    continue
+                elif key in supplierdic[supplier]["services_provided"]: #check if supplier can provide service
+                    services[key] = supplier 
+                    print(f"{supplierdic[supplier]["supplier_name"]} has been assigned for {key} service.")
+                    break
+                else:
+                    print(f"{supplierdic[supplier]["supplier_name"]} cannot provide {key} service. Please choose another supplier.")
+            else:
+                print("Supplier ID does not exist. Please choose another supplier.")
     
 
     projectdic[proj_id] = {
@@ -153,6 +169,7 @@ def updateStatus(projectdic, logbookdic):
                 print("Project status is the same. Please choose another status.")
             elif proj_status in logbook.statuses:
                 projectdic[proj_id]["project_status"] = proj_status
+                print("Project status has been updated.")
                 break
             else:
                 print("Status can only be Prep, Ongoing, or Finished.")
@@ -228,7 +245,7 @@ def changeType(projectdic,supplierdic,logbookdic, blacklisted):
                 while True:
                     supplier = input(f"Enter supplier ID for {key} service: ")
                     if supplier in supplierdic: #check if supplier exists
-                        if supplierdic[supplier]["supplier_name"] in blacklisted:
+                        if supplier in blacklisted:
                             print("Supplier is blacklisted. Please choose another supplier.")
                             continue
                         elif key in supplierdic[supplier]["services_provided"]: #check if supplier can provide service
