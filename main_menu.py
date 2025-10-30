@@ -2,12 +2,14 @@ import arts, plants, logbook, supplier
 logbookdic = {}
 projectdic = {}
 supplierdic = {}
-blacklisted = []
+blacklisted = [] # contains supplier ID
 
+#load from files
 logbook.loadProjects(projectdic)
 logbook.loadSuppliers(supplierdic)
 logbook.loadLog(logbookdic)
 
+#get blacklisted suppliers from logbook
 for log in logbookdic:
 	if logbookdic[log]["action"] == "blacklist_supplier":
 		blacklisted.append(logbookdic[log]["supplier_id"])
@@ -25,17 +27,20 @@ while True:
 	print("\t[0] Exit")
 	print()
 
-	choice = int(input("Choice: "))
+	choice = input("Choice: ")
 	print()
 	
-	if choice == 1:
+	if choice == "1":
 		plants.menu(projectdic,supplierdic,logbookdic, blacklisted)
-	elif choice == 2:
+	elif choice == "2":
 		supplier.menu(supplierdic, logbookdic)
-	elif choice == 3:
+	elif choice == "3":
 		logbook.menu(projectdic, supplierdic, logbookdic)
-	elif choice == 0:
+	elif choice == "0":
 		print("I hope you had a nice experience. Goodbye!")
 		break
+	else:
+		print("Invalid choice.")
+		print()
     
         

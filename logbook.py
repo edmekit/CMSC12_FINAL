@@ -13,12 +13,13 @@ def caesarCipher(text, shift):
     result = ''
 
     for char in text:
+        # shifts letter by the shift para
         if char in upper:
-            result += upper[(upper.index(char) + shift) % 26] #%26 is for wrapping around
+            result += upper[(upper.index(char) + shift) % 26] 
         elif char in lower:
             result += lower[(lower.index(char) + shift) % 26]
         else:
-            result += char
+            result += char # for non-letters, just add as is
 
     return result
 
@@ -28,6 +29,7 @@ def interpretCaesar(text, shift):
     result = ''
 
     for char in text:
+        # returns back the shift in caesarcipher by simply changing the sign
         if char in upper:
             result += upper[(upper.index(char) - shift) % 26]
         elif char in lower:
@@ -163,6 +165,9 @@ def menu(projectdic, supplierdic, logbookdic):
             print("Going back to main menu...")
             print()
             break
+        else:
+            print("Invalid choice.")
+            print()
 
 def addLogEntry(action, projID, suppID, remark, logbookdic):
     log_id = "L" + str(len(logbookdic) + 1)

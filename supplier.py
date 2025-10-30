@@ -1,7 +1,5 @@
 import arts, logbook
 
-
-
 def menu(supplierdic, logbookdic):
     while True:
         print(arts.suppliers)
@@ -16,29 +14,37 @@ def menu(supplierdic, logbookdic):
         print("\t[0] Exit")
         print()
 
-        choice = int(input("Choice: "))
-        if choice == 1:
+        choice = input("Choice: ")
+        if choice == "1":
             addSupplier(supplierdic, logbookdic)
-        elif choice == 2:
+        elif choice == "2":
             addProjectTypes(supplierdic, logbookdic)
-        elif choice == 3:
+        elif choice == "3":
             removeProjectTypes(supplierdic, logbookdic)
-        elif choice == 4:
+        elif choice == "4":
             addServiceProvided(supplierdic, logbookdic)
-        elif choice == 5:
+        elif choice == "5":
             removeServiceProvided(supplierdic, logbookdic)
-        elif choice == 6:
+        elif choice == "6":
             viewSupplier(supplierdic)
-        elif choice == 7:
+        elif choice == "7":
             viewAllSuppliers(supplierdic)
-        elif choice == 0:
+        elif choice == "0":
             print("Going back to main menu...")
             print()
             break
+        else:
+            print("Invalid choice. Try again.")
 
 def addSupplier(supplierdic, logbookdic):
     supp_id = "S" + str(len(supplierdic) + 1)
-    supp_name = input("Enter supplier name: ")
+    while True:
+        supp_name = input("Enter supplier name: ")
+        if supp_name == "":
+            print("Supplier name cannot be empty.")
+        else:
+            break
+            
 
     for key in supplierdic: #loop the dic and check if supplier already exists
         if supplierdic[key]["supplier_name"] == supp_name:
@@ -55,7 +61,7 @@ def addSupplier(supplierdic, logbookdic):
             if len(service_types) == 3:
                 print("Supplier provides all types of projects.")
                 break
-            choice = input("Do you want to add another type? (y/n): ")
+            choice = input("Type added successfully. Do you want to add another type? (y/n): ")
             if choice == "n":
                 break
         else:
@@ -97,7 +103,7 @@ def addProjectTypes(supplierdic, logbookdic):
     if supp_id in supplierdic:
         while True:
             new_type = input("Enter new project type: ")
-            if new_type in supplierdic[supp_id]["services_types"]:
+            if new_type in supplierdic[supp_id]["services_types"]: # avoid duplicates
                 print(f"{new_type} services is already provided by this supplier.")
             elif new_type in logbook.types:
                 supplierdic[supp_id]["services_types"].append(new_type)
@@ -160,12 +166,12 @@ def removeServiceProvided(supplierdic, logbookdic):
         while True:
             service_type = input(f"Enter service provided by {supplierdic[supp_id]["supplier_name"]} you want to remove: ")
 
-            if service_type in supplierdic[supp_id]["services_provided"]: # avoid duplicates
+            if service_type in supplierdic[supp_id]["services_provided"]: 
                 supplierdic[supp_id]["services_provided"].remove(service_type)
                 print()
                 print(f"Removed {service_type} service from supplier.")
                 break
-            elif service_type in logbook.types:
+            elif service_type in logbook.construction: # if not in services provided bbut is a valid service
                 print(f"{service_type} service is not provided by this supplier.")
             else:
                 print("Service provided can only be  Permits, Design, Masonry, Carpentry, WindowWork, MetalWork, Furniture, ElectricalWork, Plumbing, PaintWork, SiteClearing, Earthwork.")
@@ -175,7 +181,9 @@ def removeServiceProvided(supplierdic, logbookdic):
         print("Supplier ID does not exist. Check suppliers info.")
 
 def viewSupplier(supplierdic):
-    supp_id = input("Enter Project ID you want to view: ")
+    if len(supplierdic) == 0:
+        print("No suppliers yet. Add one first.")
+    supp_id = input("Enter ID of supplier you want to view: ")
 
     if supp_id in supplierdic:
         print("\t Supplier ID:", supp_id)
@@ -187,7 +195,7 @@ def viewSupplier(supplierdic):
         for i in supplierdic[supp_id]["services_provided"]:
             print("\t\t", i)
     else: 
-        print("Project ID does not exist. Check projects info.")
+        print("Supplier ID does not exist. Check projects info.")
 
 def viewAllSuppliers(supplierdic):
     if len(supplierdic) == 0:
