@@ -145,23 +145,22 @@ def loadLog(logbookdic):
 def menu(projectdic, supplierdic, logbookdic):
     while True:
         print(arts.logs)
-        print("\tLogbook Section")
-        print("\t1. View All Entries")
-        print("\t2. Blacklist Supplier")
-        print("\t3. Data Reset")
-        print("\t0. Exit")
+        print("\t[1] View All Entries")
+        print("\t[2] Blacklist Supplier")
+        print("\t[3] Data Reset")
+        print("\t[0] Exit")
         print()
 
-        choice = int(input("Choice: "))
+        choice = input("Choice: ")
         print()
 
-        if choice == 1:
+        if choice == "1":
             viewAllEntries(logbookdic)
-        elif choice == 2:
+        elif choice == "2":
             blacklistSupplier(supplierdic, logbookdic)
-        elif choice == 3:
+        elif choice == "3":
             dataReset(projectdic, supplierdic, logbookdic)
-        elif choice == 0:
+        elif choice == "0":
             print("Going back to main menu...")
             print()
             break

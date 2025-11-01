@@ -33,7 +33,7 @@ def menu(projectdic,supplierdic, logbookdic, blacklisted):
             changeSupplier(projectdic, supplierdic, logbookdic, blacklisted)
         elif choice == "8":
             changeType(projectdic,supplierdic, logbookdic, blacklisted)
-        elif choice == "9":
+        elif choice == "0":
             print("Going back to main menu...")
             print()
             break
@@ -71,6 +71,13 @@ def addProject(projectdic, logbookdic, supplierdic, blacklisted):
             services[logbook.demolition[i]] = ""
 
     for key in services: #fill services with suppliers
+        providers = []
+        for s in supplierdic:  # loop the supplier dictionary and look for suppliers that can provide the service
+                if key in supplierdic[s]["services_provided"]:
+                        providers.append(s)
+        if len(providers) == 0:
+            print(f"No supplier can provide {key} service. Add one later.")
+            continue 
         while True:
             supplier = input(f"Enter supplier ID for {key} service: ")
             if supplier in supplierdic: #check if supplier exists
@@ -261,8 +268,16 @@ def changeType(projectdic,supplierdic,logbookdic, blacklisted):
             #update project dict
             projectdic[proj_id]["project_type"] = new_type
             projectdic[proj_id]["services"] = new_services
-
+            
             for key in new_services: #fill services with suppliers
+                providers = [] # contain ID of available suppliers
+                for s in supplierdic:  # loop the supplier dictionary and look for suppliers that can provide the service
+                    if key in supplierdic[s]["services_provided"]:
+                        providers.append(s)
+                if len(providers) == 0:
+                    print(f"No supplier can provide {key} service. Add one later.")
+                    continue  
+
                 while True:
                     supplier = input(f"Enter supplier ID for {key} service: ")
                     if supplier in supplierdic: #check if supplier exists

@@ -1,3 +1,10 @@
+'''
+Edmarc Justine B. Mekitpekit
+CMSC12 Y-1L
+CONSTRUCTION TRACKING SYSTEM
+'''
+
+
 import arts, plants, logbook, supplier
 logbookdic = {}
 projectdic = {}
