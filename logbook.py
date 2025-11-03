@@ -78,17 +78,17 @@ def loadProjects(projectdic):
 
     project_file.close()
 
-def saveSuppliers(suppleirdic):
+def saveSuppliers(supplierdic):
     supplier_file = open("suppliers.txt", "w")
 
-    for s in suppleirdic:
+    for s in supplierdic:
         supplier_file.write(caesarCipher(s, 5) + "?")
-        supplier_file.write(caesarCipher(suppleirdic[s]["supplier_name"], 4) + "?")
-        for t in suppleirdic[s]["services_types"]:
+        supplier_file.write(caesarCipher(supplierdic[s]["supplier_name"], 4) + "?")
+        for t in supplierdic[s]["services_types"]:
             supplier_file.write(caesarCipher(t, 4) + "|")
         supplier_file.write("?")
-        for s in suppleirdic[s]["services_provided"]:
-            supplier_file.write(caesarCipher(s, 3) + "|")
+        for serv in supplierdic[s]["services_provided"]:
+            supplier_file.write(caesarCipher(serv, 3) + "|")
         supplier_file.write("\n")
 
     supplier_file.close()
