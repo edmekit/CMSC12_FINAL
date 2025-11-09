@@ -73,7 +73,7 @@ def addSupplier(supplierdic, logbookdic):
         print()
         service_provided = input(f"Enter service provided by {supp_name} (type 'ALL' to add all services): ")
         if service_provided == "ALL":
-            services_provided = logbook.construction
+            services_provided = logbook.construction.copy()
             break
         elif service_provided in service_types: # avoid duplicates
             print("Supplier already provides this service.")
@@ -125,7 +125,10 @@ def removeProjectTypes(supplierdic, logbookdic):
     if supp_id in supplierdic:
         while True:
             remove_type = input("Enter which project type you want to remove: ")
-            if remove_type in supplierdic[supp_id]["services_types"]:
+            if len(supplierdic[supp_id]["services_types"]) == 0:
+                print("Supplier does not provide any project types.")
+                break
+            elif remove_type in supplierdic[supp_id]["services_types"]:
                 supplierdic[supp_id]["services_types"].remove(remove_type)
                 print()
                 print("Project type removed successfully.")
