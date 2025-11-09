@@ -42,14 +42,14 @@ def interpretCaesar(text, shift):
 def saveProjects(projectdic):
     project_file = open("projects.txt", "w")
 
-    for k in projectdic:
-        project_file.write(caesarCipher(k, 3) + "?")
-        project_file.write(caesarCipher(projectdic[k]["project_type"], 4) + "?")
-        project_file.write(caesarCipher(projectdic[k]["description"], 5) + "?")
-        project_file.write(caesarCipher(projectdic[k]["project_status"], 3) + "?")
-        for key in projectdic[k]["services"]:
-            project_file.write(caesarCipher(key, 4) + "?")
-            project_file.write(caesarCipher(projectdic[k]["services"][key], 5) + "?")
+    for proj in projectdic:
+        project_file.write(caesarCipher(proj, 3) + "?")
+        project_file.write(caesarCipher(projectdic[proj]["project_type"], 4) + "?")
+        project_file.write(caesarCipher(projectdic[proj]["description"], 5) + "?")
+        project_file.write(caesarCipher(projectdic[proj]["project_status"], 3) + "?")
+        for key in projectdic[proj]["services"]:
+            project_file.write(caesarCipher(key, 4) + "?") #save pair by service first then ID
+            project_file.write(caesarCipher(projectdic[proj]["services"][key], 5) + "?")
         project_file.write("\n")
 
     project_file.close()
@@ -81,6 +81,7 @@ def loadProjects(projectdic):
 def saveSuppliers(supplierdic):
     supplier_file = open("suppliers.txt", "w")
 
+    # seperate supplier ID, name, types and services with "?" and each type and service with "|"
     for s in supplierdic:
         supplier_file.write(caesarCipher(s, 5) + "?")
         supplier_file.write(caesarCipher(supplierdic[s]["supplier_name"], 4) + "?")
@@ -99,9 +100,10 @@ def loadSuppliers(supplierdic):
 
     for s in suppliers:
         details = s.split("?") #split into 4 parts
-        services_types = details[2].split("|")
+        services_types = details[2].split("|") # split the types and services
         services_provided = details[3][:-1].split("|")
 
+        # interpret the caesar cipher and filter empty strings
         types = [interpretCaesar(i, 4) for i in services_types if i != ""]
         provided = [interpretCaesar(i, 3) for i in services_provided if i != ""]
 
