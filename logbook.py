@@ -144,7 +144,7 @@ def loadLog(logbookdic):
     logbook.close()
 
 
-def menu(projectdic, supplierdic, logbookdic):
+def menu(projectdic, supplierdic, logbookdic, blacklisted):
     while True:
         print(arts.logs)
         print("\t[1] View All Entries")
@@ -159,7 +159,7 @@ def menu(projectdic, supplierdic, logbookdic):
         if choice == "1":
             viewAllEntries(logbookdic)
         elif choice == "2":
-            blacklistSupplier(supplierdic, logbookdic)
+            blacklistSupplier(supplierdic, logbookdic, blacklisted)
         elif choice == "3":
             dataReset(projectdic, supplierdic, logbookdic)
         elif choice == "0":
@@ -193,7 +193,7 @@ def viewAllEntries(logbookdic):
         print(f"\tRemark: {logbookdic[key]["remark"]}")
         print()
 
-def blacklistSupplier(supplierdic, logbookdic):
+def blacklistSupplier(supplierdic, logbookdic, blacklisted):
     log_id = "L" + str(len(logbookdic) + 1)
 
     supp_id = input("Enter ID of supplier you want to add to blacklist: ")
@@ -208,6 +208,7 @@ def blacklistSupplier(supplierdic, logbookdic):
         }
         print()
         print(f"{supplierdic[supp_id]["supplier_name"]} has been blacklisted.")
+        blacklisted.append(supp_id)
         saveLog(logbookdic)
 
     else:

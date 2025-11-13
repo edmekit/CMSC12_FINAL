@@ -42,7 +42,7 @@ while True:
 	elif choice == "2":
 		supplier.menu(supplierdic, logbookdic)
 	elif choice == "3":
-		logbook.menu(projectdic, supplierdic, logbookdic)
+		logbook.menu(projectdic, supplierdic, logbookdic, blacklisted)
 	elif choice == "0":
 		print("I hope you had a nice experience. Goodbye!")
 		break
