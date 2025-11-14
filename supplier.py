@@ -172,7 +172,6 @@ def addServiceProvided(supplierdic, logbookdic):
                     print(f"Added {new_service} service to {supplierdic[supp_id]['supplier_name']}.")
             else:
                 print("Invalid service. Make sure it is included in project type.")
-        logbook.addLogEntry("add_service_provided", "NA", supp_id, new_service, logbookdic)
         logbook.saveSuppliers(supplierdic)
     else:
         print("Supplier ID does not exist. Check suppliers info.")
@@ -224,7 +223,7 @@ def viewAllSuppliers(supplierdic):
         print("No suppliers yet. Add one first.")
         return
     print()
-    print(("=" * 12) + " ADD SUPPLIER " + ("=" * 13))
+    print(("=" * 10) + " VIEW ALL SUPPLIERS " + ("=" * 10))
     for key in supplierdic:
         print("\t Supplier ID:", key)
         print("\t Supplier Name:", supplierdic[key]["supplier_name"]),

@@ -169,6 +169,7 @@ def viewProject(projectdic, supplierdic):
 def viewAllprojects(projectdic, supplierdic):
     if len(projectdic) == 0:
         print("No projects found. Add a project first.")
+        return
     else:
         print()
         print(("=" * 13) + " VIEW ALL PROJECTS " + ("=" * 13))
