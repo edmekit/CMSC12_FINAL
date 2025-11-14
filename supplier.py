@@ -37,6 +37,8 @@ def menu(supplierdic, logbookdic):
             print("Invalid choice. Try again.")
 
 def addSupplier(supplierdic, logbookdic):
+    print()
+    print(("=" * 15) + " ADD SUPPLIER " + ("=" * 15))
     supp_id = "S" + str(len(supplierdic) + 1)
     while True:
         supp_name = input("Enter supplier name: ")
@@ -45,7 +47,6 @@ def addSupplier(supplierdic, logbookdic):
         else:
             break
             
-
     for key in supplierdic: #loop the dic and check if supplier already exists
         if supplierdic[key]["supplier_name"] == supp_name:
             print("Supplier already exists. Update supplier info instead.")
@@ -53,16 +54,15 @@ def addSupplier(supplierdic, logbookdic):
     
     service_types = []
     while True:
-        service_type = input(f"Enter project type provided by {supp_name}: ")
-        if service_type in service_types: # avoid duplicates
+        service_type = input(f"Enter project type provided by {supp_name}. Enter 'X' to finish: ")
+        if service_type == "X":
+            break
+        elif service_type in service_types: # avoid duplicates
             print("Supplier already provides this service.")
         elif service_type in logbook.types:
             service_types.append(service_type)
             if len(service_types) == 3:
                 print("Supplier provides all types of projects.")
-                break
-            choice = input("Type added successfully. Do you want to add another type? (y/n): ")
-            if choice == "n":
                 break
         else:
             print("Type can only be Construction, Renovation, or Demolition.")
@@ -71,19 +71,22 @@ def addSupplier(supplierdic, logbookdic):
 
     while True:
         print()
-        service_provided = input(f"Enter service provided by {supp_name} (type 'ALL' to add all services): ")
-        if service_provided == "ALL":
-            services_provided = logbook.construction.copy()
+        service_provided = input(f"Enter services provided by {supp_name}. Enter 'X' to finish: ")
+        allowed = False
+        if service_provided == "X":
             break
-        elif service_provided in service_types: # avoid duplicates
-            print("Supplier already provides this service.")
-        elif service_provided in logbook.construction:
-            services_provided.append(service_provided)
-            choice = input("Do you want to add another service? (y/n): ")
-            if choice == "n":
+        for t in service_types:
+            if service_provided in logbook.types[t]:
+                allowed = True
                 break
+        if allowed:
+            if service_provided in services_provided: # avoid duplicates
+                print("Supplier already provides this service.")
+            else:
+                services_provided.append(service_provided)
+                print(f"Added {service_provided} service to {supp_name}.")
         else:
-            print("Service provided can only be  Permits, Design, Masonry, Carpentry, WindowWork, MetalWork, Furniture, ElectricalWork, Plumbing, PaintWork, SiteClearing, Earthwork.")
+            print("Invalid service. Make sure it is included in project type.")
 
     supplierdic[supp_id] = {
         "supplier_name": supp_name, 
@@ -98,6 +101,8 @@ def addSupplier(supplierdic, logbookdic):
     logbook.saveSuppliers(supplierdic)
 
 def addProjectTypes(supplierdic, logbookdic):
+    print()
+    print(("=" * 13) + " ADD PROJECT TYPE " + ("=" * 13))
     supp_id = input("Enter ID of supplier you want to add project type to: ")
 
     if supp_id in supplierdic:
@@ -118,8 +123,9 @@ def addProjectTypes(supplierdic, logbookdic):
         print("Supplier ID does not exist. Check suppliers info.")
     
     
-
 def removeProjectTypes(supplierdic, logbookdic):
+    print()
+    print(("=" * 12) + " REMOVE PROJECT TYPE " + ("=" * 12))
     supp_id = input("Enter ID of supplier you want to remove project type from: ")
 
     if supp_id in supplierdic:
@@ -143,26 +149,37 @@ def removeProjectTypes(supplierdic, logbookdic):
         print("Supplier ID does not exist. Check suppliers info.")
 
 def addServiceProvided(supplierdic, logbookdic):
+    print()
+    print(("=" * 11) + " ADD SERVICE PROVIDED " + ("=" * 11))
     supp_id = input("Enter ID of supplier you want to add service provided: ")
 
     if supp_id in supplierdic:
         while True:
-            new_service = input(f"Enter new service provided by {supplierdic[supp_id]["supplier_name"]}: ")
-            if new_service in supplierdic[supp_id]["services_provided"]:
-                print(f"{new_service} is already provided by this supplier.")
-            elif new_service in logbook.construction:
-                supplierdic[supp_id]["services_provided"].append(new_service)
-                print()
-                print(f"Added {new_service} service successfully.")
+            print()
+            new_service = input(f"Enter new services provided by {supplierdic[supp_id]['supplier_name']}. Enter 'X' to finish: ")
+            allowed = False
+            if new_service == "X":
                 break
+            for t in supplierdic[supp_id]["services_types"]:
+                if new_service in logbook.types[t]:
+                    allowed = True
+                    break
+            if allowed:
+                if new_service in supplierdic[supp_id]["services_provided"]: # avoid duplicates
+                    print("Supplier already provides this service.")
+                else:
+                    supplierdic[supp_id]['services_provided'].append(new_service)
+                    print(f"Added {new_service} service to {supplierdic[supp_id]['supplier_name']}.")
             else:
-                print("Service provided can only be  Permits, Design, Masonry, Carpentry, WindowWork, MetalWork, Furniture, ElectricalWork, Plumbing, PaintWork, SiteClearing, Earthwork.")
+                print("Invalid service. Make sure it is included in project type.")
         logbook.addLogEntry("add_service_provided", "NA", supp_id, new_service, logbookdic)
         logbook.saveSuppliers(supplierdic)
     else:
         print("Supplier ID does not exist. Check suppliers info.")
 
 def removeServiceProvided(supplierdic, logbookdic):
+    print()
+    print(("=" * 10) + " REMOVE SERVICE PROVIDED " + ("=" * 11))
     supp_id = input("Enter ID of supplier you want to remove service provided from: ")
 
     if supp_id in supplierdic:
@@ -174,10 +191,9 @@ def removeServiceProvided(supplierdic, logbookdic):
                 print()
                 print(f"Removed {service_type} service from supplier.")
                 break
-            elif service_type in logbook.construction: # if not in services provided bbut is a valid service
-                print(f"{service_type} service is not provided by this supplier.")
             else:
-                print("Service provided can only be  Permits, Design, Masonry, Carpentry, WindowWork, MetalWork, Furniture, ElectricalWork, Plumbing, PaintWork, SiteClearing, Earthwork.")
+                print(f"{service_type} is not provided by {supplierdic[supp_id]['supplier_name']}.")
+
         logbook.addLogEntry("remove_service_provided", "NA", supp_id, service_type, logbookdic)
         logbook.saveSuppliers(supplierdic)
     else:
@@ -186,6 +202,9 @@ def removeServiceProvided(supplierdic, logbookdic):
 def viewSupplier(supplierdic):
     if len(supplierdic) == 0:
         print("No suppliers yet. Add one first.")
+        return
+    print()
+    print(("=" * 15) + " VIEW SUPPLIER " + ("=" * 15))
     supp_id = input("Enter ID of supplier you want to view: ")
 
     if supp_id in supplierdic:
@@ -203,6 +222,9 @@ def viewSupplier(supplierdic):
 def viewAllSuppliers(supplierdic):
     if len(supplierdic) == 0:
         print("No suppliers yet. Add one first.")
+        return
+    print()
+    print(("=" * 12) + " ADD SUPPLIER " + ("=" * 13))
     for key in supplierdic:
         print("\t Supplier ID:", key)
         print("\t Supplier Name:", supplierdic[key]["supplier_name"]),

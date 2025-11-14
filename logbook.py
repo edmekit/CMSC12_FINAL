@@ -1,11 +1,11 @@
 import arts
 
-types = ["Construction", "Renovation", "Demolition"]
+types = {"Construction" : ['Permits','Design','Masonry','Carpentry','WindowWork','MetalWork','Furniture','ElectricalWork','Plumbing','PaintWork','SiteClearing','Earthwork'], 
+        "Renovation" : ['Permits','Masonry','Carpentry','WindowWork',
+'MetalWork','ElectricalWork','PaintWork'], 
+        "Demolition" : ['Permits','SiteClearing','Earthwork']}
 statuses = ["Prep", "Ongoing", "Finished"]
-construction = ['Permits','Design','Masonry','Carpentry','WindowWork','MetalWork','Furniture','ElectricalWork','Plumbing','PaintWork','SiteClearing','Earthwork']
-renovation = ['Permits','Masonry','Carpentry','WindowWork',
-'MetalWork','ElectricalWork','PaintWork']
-demolition = ['Permits','SiteClearing','Earthwork']
+
 
 def caesarCipher(text, shift):
     upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -185,6 +185,9 @@ def addLogEntry(action, projID, suppID, remark, logbookdic):
 def viewAllEntries(logbookdic):
     if len(logbookdic) == 0:
         print("No log entries.")
+        return
+    print()
+    print(("=" * 15) + " VIEW ALL LOGS " + ("=" * 15))
     for key in logbookdic:
         print(f"\tLog ID: {key}")
         print(f"\tAction: {logbookdic[key]["action"]}")
@@ -194,6 +197,8 @@ def viewAllEntries(logbookdic):
         print()
 
 def blacklistSupplier(supplierdic, logbookdic, blacklisted):
+    print()
+    print(("=" * 12) + " BLACKLIST SUPPLIER " + ("=" * 12))
     log_id = "L" + str(len(logbookdic) + 1)
 
     supp_id = input("Enter ID of supplier you want to add to blacklist: ")
@@ -215,6 +220,8 @@ def blacklistSupplier(supplierdic, logbookdic, blacklisted):
         print("Supplier ID does not exist. Check suppliers info.")
 
 def dataReset(projectdic, supplierdic, logbookdic):
+    print()
+    print(("=" * 16) + " DATA RESET " + ("=" * 16))
     confirm = input("Are you sure you want to delete all data? (y/n): ")
     if confirm == "y":
         logbookdic.clear()
