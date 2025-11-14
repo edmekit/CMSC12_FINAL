@@ -169,6 +169,7 @@ def addServiceProvided(supplierdic, logbookdic):
                     print("Supplier already provides this service.")
                 else:
                     supplierdic[supp_id]['services_provided'].append(new_service)
+                    logbook.addLogEntry("add_service_provided", "NA", supp_id, new_service, logbookdic)
                     print(f"Added {new_service} service to {supplierdic[supp_id]['supplier_name']}.")
             else:
                 print("Invalid service. Make sure it is included in project type.")

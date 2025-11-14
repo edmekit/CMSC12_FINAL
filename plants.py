@@ -183,7 +183,7 @@ def viewAllprojects(projectdic, supplierdic):
                 if v == "":
                     print(f"\t\tType: {k}, Supplier: None yet.")
                 else:
-                    print(f"\t\tType: {k}, Supplier: {supplierdic[v]["supplier_name"]}")
+                    print(f"\t\tType: {k}, Supplier: {supplierdic[v]['supplier_name']}")
             print()
 
 def updateStatus(projectdic, logbookdic):
@@ -218,6 +218,7 @@ def changeSupplier(projectdic, supplierdic,logbookdic, blacklisted):
     if proj_id in projectdic:
         if projectdic[proj_id]["project_status"] != "Finished": #check if project is still on prep or ongoing
             service = input("Enter which service you want to change supplier: ")
+            print()
             if service in projectdic[proj_id]["services"]: #validate if service exists
                 print("Here are the suppliers that can provide",service ,"service: ")
                 providers = [] # contain ID of available suppliers
@@ -226,6 +227,11 @@ def changeSupplier(projectdic, supplierdic,logbookdic, blacklisted):
                     if service in supplierdic[key]["services_provided"]:
                         print(f"\tID: {key}, Name: {supplierdic[key]["supplier_name"]}")
                         providers.append(key)
+                
+                if len(providers) == 0: # if no supplier can provide the service
+                    print("No supplier can provide this service. Add supplier first.")
+                    print()
+                    return
                 
                 while True:
                     change_supplier = input(f"Enter ID of supplier to change {service} service to: ")
