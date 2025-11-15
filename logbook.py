@@ -102,8 +102,8 @@ def loadSuppliers(supplierdic):
         services_types = details[2].split("|")
         services_provided = details[3][:-1].split("|")
 
-        types = [interpretCaesar(i, 4) for i in services_types]
-        provided = [interpretCaesar(i, 3) for i in services_provided]
+        types = [interpretCaesar(i, 4) for i in services_types if i != ""]
+        provided = [interpretCaesar(i, 3) for i in services_provided if i != ""]
 
         supplierdic[interpretCaesar(details[0], 5)] = {
             "supplier_name": interpretCaesar(details[1], 4),
