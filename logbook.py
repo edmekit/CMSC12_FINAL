@@ -159,7 +159,7 @@ def menu(projectdic, supplierdic, logbookdic, blacklisted):
         elif choice == "2":
             blacklistSupplier(supplierdic, logbookdic, blacklisted)
         elif choice == "3":
-            dataReset(projectdic, supplierdic, logbookdic)
+            dataReset(projectdic, supplierdic, logbookdic, blacklisted)
         elif choice == "0":
             print("Going back to main menu...")
             print()
@@ -217,7 +217,7 @@ def blacklistSupplier(supplierdic, logbookdic, blacklisted):
     else:
         print("Supplier ID does not exist. Check suppliers info.")
 
-def dataReset(projectdic, supplierdic, logbookdic):
+def dataReset(projectdic, supplierdic, logbookdic, blacklisted):
     print()
     print(("=" * 16) + " DATA RESET " + ("=" * 16))
     confirm = input("Are you sure you want to delete all data? (y/n): ")
@@ -225,6 +225,7 @@ def dataReset(projectdic, supplierdic, logbookdic):
         logbookdic.clear()
         supplierdic.clear()
         projectdic.clear()
+        blacklisted.clear()
         print("All data has been deleted.")
         saveLog(logbookdic)
         saveSuppliers(supplierdic)

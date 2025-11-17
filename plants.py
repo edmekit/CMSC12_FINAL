@@ -179,11 +179,11 @@ def viewAllprojects(projectdic, supplierdic):
             print("\t Description:", projectdic[key]["description"])
             print("\t Project Status:", projectdic[key]["project_status"])
             print("\t Services: ")
-            for k,v in projectdic[key]["services"].items():
-                if v == "":
-                    print(f"\t\tType: {k}, Supplier: None yet.")
+            for service, supplier in projectdic[key]["services"].items():
+                if supplier == "":
+                    print(f"\t\tType: {service}, Supplier: None yet.")
                 else:
-                    print(f"\t\tType: {k}, Supplier: {supplierdic[v]['supplier_name']}")
+                    print(f"\t\tType: {service}, Supplier: {supplierdic[supplier]['supplier_name']}")
             print()
 
 def updateStatus(projectdic, logbookdic):
@@ -227,7 +227,7 @@ def changeSupplier(projectdic, supplierdic,logbookdic, blacklisted):
                     if service in supplierdic[key]["services_provided"]:
                         print(f"\tID: {key}, Name: {supplierdic[key]["supplier_name"]}")
                         providers.append(key)
-                
+                print()
                 if len(providers) == 0: # if no supplier can provide the service
                     print("No supplier can provide this service. Add supplier first.")
                     print()
@@ -237,11 +237,11 @@ def changeSupplier(projectdic, supplierdic,logbookdic, blacklisted):
                     change_supplier = input(f"Enter ID of supplier to change {service} service to: ")
                     if change_supplier in supplierdic:
                         if change_supplier in blacklisted:
-                            print("Supplier is blacklisted. Please choose another supplier.")
+                            print(f"{supplierdic[change_supplier]['supplier_name']} is blacklisted. Please choose another supplier.")
                         elif change_supplier in providers:
                             projectdic[proj_id]["services"][service] = change_supplier
                             print()
-                            print("Supplier has been changed.")
+                            print(f"Supplier has been changed to {supplierdic[change_supplier]["supplier_name"]}.")
                             break
                         else:
                             print("Supplier does not provide this service. Please choose in the ones provided.")

@@ -58,11 +58,13 @@ def addSupplier(supplierdic, logbookdic):
         if service_type == "X":
             break
         elif service_type in service_types: # avoid duplicates
-            print("Supplier already provides this service.")
+            print(f"{supp_name} already provides this service.")
         elif service_type in logbook.types:
             service_types.append(service_type)
+            print(f"Added {service_type} project type to {supp_name}.")
+            print()
             if len(service_types) == 3:
-                print("Supplier provides all types of projects.")
+                print(f"{supp_name} provides all types of projects.")
                 break
         else:
             print("Type can only be Construction, Renovation, or Demolition.")
@@ -81,7 +83,7 @@ def addSupplier(supplierdic, logbookdic):
                 break
         if allowed:
             if service_provided in services_provided: # avoid duplicates
-                print("Supplier already provides this service.")
+                print(f"{supp_name} already provides this service.")
             else:
                 services_provided.append(service_provided)
                 print(f"Added {service_provided} service to {supp_name}.")
@@ -107,17 +109,21 @@ def addProjectTypes(supplierdic, logbookdic):
 
     if supp_id in supplierdic:
         while True:
-            new_type = input("Enter new project type: ")
-            if new_type in supplierdic[supp_id]["services_types"]: # avoid duplicates
+            new_type = input("Enter new project type: Press 'X' to finish: ")
+            if new_type == "X":
+                break
+            elif new_type in supplierdic[supp_id]["services_types"]: # avoid duplicates
                 print(f"{new_type} services is already provided by this supplier.")
             elif new_type in logbook.types:
                 supplierdic[supp_id]["services_types"].append(new_type)
+                logbook.addLogEntry("add_project_type", "NA", supp_id, new_type, logbookdic)
+                print(f"{new_type} project type added successfully.")
                 print()
-                print("Project type added successfully.")
-                break
+                if len(supplierdic[supp_id]["services_types"]) == 3:
+                    print(f"{supplierdic[supp_id]['supplier_name']} provides all types of projects.")
+                    break
             else:
                 print("Type can only be Construction, Renovation, or Demolition.")
-        logbook.addLogEntry("add_project_type", "NA", supp_id, new_type, logbookdic)
         logbook.saveSuppliers(supplierdic)
     else:
         print("Supplier ID does not exist. Check suppliers info.")
@@ -132,12 +138,12 @@ def removeProjectTypes(supplierdic, logbookdic):
         while True:
             remove_type = input("Enter which project type you want to remove: ")
             if len(supplierdic[supp_id]["services_types"]) == 0:
-                print("Supplier does not provide any project types.")
+                print(f"{supplierdic[supp_id]['supplier_name']} does not provide any project types.")
                 break
             elif remove_type in supplierdic[supp_id]["services_types"]:
                 supplierdic[supp_id]["services_types"].remove(remove_type)
                 print()
-                print("Project type removed successfully.")
+                print(f"Removed {remove_type} project type from {supplierdic[supp_id]['supplier_name']}.")
                 break
             elif remove_type in logbook.types:
                 print(f"{remove_type} services is not provided by this supplier.")
@@ -166,7 +172,7 @@ def addServiceProvided(supplierdic, logbookdic):
                     break
             if allowed:
                 if new_service in supplierdic[supp_id]["services_provided"]: # avoid duplicates
-                    print("Supplier already provides this service.")
+                    print(f"{supplierdic[supp_id]['supplier_name']} already provides this service.")
                 else:
                     supplierdic[supp_id]['services_provided'].append(new_service)
                     logbook.addLogEntry("add_service_provided", "NA", supp_id, new_service, logbookdic)
