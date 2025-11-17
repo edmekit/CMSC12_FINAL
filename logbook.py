@@ -29,11 +29,16 @@ def interpretCaesar(text, shift):
     result = ''
 
     for char in text:
-        # returns back the shift in caesarcipher by simply changing the sign
         if char in upper:
-            result += upper[(upper.index(char) - shift) % 26]
+            decoded = upper.index(char) - shift
+            if decoded < 0:
+                decoded += 26
+            result += upper[decoded]
         elif char in lower:
-            result += lower[(lower.index(char) - shift) % 26]
+            decoded = lower.index(char) - shift
+            if decoded < 0:
+                decoded += 26
+            result += lower[decoded]
         else:
             result += char
 

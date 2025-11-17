@@ -65,26 +65,27 @@ def addProject(projectdic, logbookdic, supplierdic, blacklisted):
     for i in range(len(logbook.types[proj_type])):
         services[logbook.types[proj_type][i]] = ""
 
-    for key in services: #fill services with suppliers
+    for serv in services: #fill services with suppliers
         providers = []
         for s in supplierdic:  # loop the supplier dictionary and look for suppliers that can provide the service
-                if key in supplierdic[s]["services_provided"]:
+                if serv in supplierdic[s]["services_provided"]:
                         providers.append(s)
         if len(providers) == 0:
-            print(f"No supplier can provide {key} service. Add one later.")
+            print(f"No supplier can provide {serv} service. Add one later.")
             continue 
         while True:
-            supplier = input(f"Enter supplier ID for {key} service: ")
+            print()
+            supplier = input(f"Enter supplier ID for {serv} service: ")
             if supplier in supplierdic: #check if supplier exists
                 if supplier in blacklisted:
                     print("Supplier is blacklisted. Please choose another supplier.")
                     continue
-                elif key in supplierdic[supplier]["services_provided"]: #check if supplier can provide service
-                    services[key] = supplier 
-                    print(f"{supplierdic[supplier]["supplier_name"]} has been assigned for {key} service.")
+                elif serv in supplierdic[supplier]["services_provided"]: #check if supplier can provide service
+                    services[serv] = supplier 
+                    print(f"{supplierdic[supplier]["supplier_name"]} has been assigned for {serv} service.")
                     break
                 else:
-                    print(f"{supplierdic[supplier]["supplier_name"]} cannot provide {key} service. Please choose another supplier.")
+                    print(f"{supplierdic[supplier]["supplier_name"]} cannot provide {serv} service. Please choose another supplier.")
             else:
                 print("Supplier ID does not exist. Please choose another supplier.")
     
