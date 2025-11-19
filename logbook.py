@@ -237,11 +237,3 @@ def dataReset(projectdic, supplierdic, logbookdic, blacklisted):
         saveProjects(projectdic)
     else:
         print("Data reset cancelled.")
-    
-
-
-    
-        
-            
-    
-
