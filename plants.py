@@ -26,7 +26,7 @@ def menu(projectdic,supplierdic, logbookdic, blacklisted):
         elif choice == "4":
             viewProject(projectdic,supplierdic)
         elif choice == "5":
-            viewAllprojects(projectdic,supplierdic)
+            viewAllprojects(projectdic,supplierdic, "menu")
         elif choice == "6":
             updateStatus(projectdic, logbookdic)
         elif choice == "7":
@@ -167,29 +167,44 @@ def viewProject(projectdic, supplierdic):
     else: 
         print("Project ID does not exist. Check projects info.")
     
-def viewAllprojects(projectdic, supplierdic):
+def viewAllprojects(projectdic, supplierdic, mode):
     if len(projectdic) == 0:
         print("No projects found. Add a project first.")
         return
     else:
-        print()
-        print(("=" * 13) + " VIEW ALL PROJECTS " + ("=" * 13))
-        for key in projectdic:
-            print("\t Project ID:", key)
-            print("\t Project Type:", projectdic[key]["project_type"]),
-            print("\t Description:", projectdic[key]["description"])
-            print("\t Project Status:", projectdic[key]["project_status"])
-            print("\t Services: ")
-            for service, supplier in projectdic[key]["services"].items():
-                if supplier == "":
-                    print(f"\t\tType: {service}, Supplier: None yet.")
-                else:
-                    print(f"\t\tType: {service}, Supplier: {supplierdic[supplier]['supplier_name']}")
+        if mode == "menu":
             print()
-
+            print(("=" * 13) + " VIEW ALL PROJECTS " + ("=" * 13))
+            for key in projectdic:
+                print("\t Project ID:", key)
+                print("\t Project Type:", projectdic[key]["project_type"]),
+                print("\t Description:", projectdic[key]["description"])
+                print("\t Project Status:", projectdic[key]["project_status"])
+                print("\t Services: ")
+                for service, supplier in projectdic[key]["services"].items():
+                    if supplier == "":
+                        print(f"\t\tType: {service}, Supplier: None yet.")
+                    else:
+                        print(f"\t\tType: {service}, Supplier: {supplierdic[supplier]['supplier_name']}")
+                print()
+        elif mode == "func":
+            for key in projectdic:
+                print("\t Project ID:", key)
+                print("\t Project Type:", projectdic[key]["project_type"]),
+                print("\t Description:", projectdic[key]["description"])
+                print("\t Project Status:", projectdic[key]["project_status"])
+                print("\t Services: ")
+                for service, supplier in projectdic[key]["services"].items():
+                    if supplier == "":
+                        print(f"\t\tType: {service}, Supplier: None yet.")
+                    else:
+                        print(f"\t\tType: {service}, Supplier: {supplierdic[supplier]['supplier_name']}")
+                print()
 def updateStatus(projectdic, logbookdic):
     print()
     print(("=" * 11) + " UPDATE PROJECT STATUS " + ("=" * 11))
+    print()
+    viewAllStatus(projectdic)
     proj_id = input("Enter Project ID: ")
     if proj_id in projectdic:
         while True:
@@ -214,6 +229,7 @@ def changeSupplier(projectdic, supplierdic,logbookdic, blacklisted):
         return
     print()
     print(("=" * 13) + " CHANGE SUPPLIER " + ("=" * 13))
+    viewAllSuppServ(projectdic, supplierdic)
     proj_id = input("Enter Project ID you want to change supplier: ")
 
     if proj_id in projectdic:
@@ -318,5 +334,13 @@ def changeType(projectdic,supplierdic,logbookdic, blacklisted):
         print("Project ID does not exist. Check projects info.")
 
                 
+def viewAllStatus(projectdic):
+    for key in projectdic:
+        print(f"\tProject ID: {key}, Status: {projectdic[key]['project_status']}")
 
-
+def viewAllSuppServ(projectdic, supplierdic):
+    for key in projectdic:
+        print(f"Project ID: {key}")
+        for serv in projectdic[key]["services"]:
+            print(f"\tService: {serv}, Supplier: {supplierdic[projectdic[key]['services'][serv]]['supplier_name']}")
+        print()
